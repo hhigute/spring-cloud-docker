@@ -1,6 +1,9 @@
 version: '3.5'
 services:
     eureka-registry-server: 
+        build: 
+            context: ./spring-cloud-registry-eureka-server
+            dockerfile: Dockerfile
         image: spring-cloud-registry-eureka-server:beta
         expose:
             - 8761
@@ -11,6 +14,9 @@ services:
                 aliases:
                     - eureka-server
     zuul-api-gateway-server:
+        build: 
+            context: ./spring-zuul-api-gateway-server
+            dockerfile: Dockerfile
         image: spring-zuul-api-gateway-server:beta
         ports:
             - '8765:8765'
@@ -23,6 +29,9 @@ services:
         depends_on:
             - eureka-registry-server
     preloaded-data-service:
+        build: 
+            context: ./spring-preloaded-data-service
+            dockerfile: Dockerfile
         image: spring-preloaded-data-service:beta
         ports:
             - 8000-8005:8000
@@ -39,6 +48,9 @@ services:
             - eureka-registry-server
             - zuul-api-gateway-server  
     spring-calculate-fee-service:
+        build: 
+            context: ./spring-calculate-fee-service
+            dockerfile: Dockerfile
         image: spring-calculate-fee-service:beta
         ports:
           - '8100:8100'
