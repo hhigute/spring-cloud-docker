@@ -203,7 +203,11 @@ Removing intermediate container 0c076494d851
 Successfully built 38be159ace4d
 Successfully tagged spring-calculate-fee-service:beta
 WARNING: Image for service spring-calculate-fee-service was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
-Creating spring-cloud-docker_eureka-registry-server_1 ... done                           Creating spring-cloud-docker_zuul-api-gateway-server_1 ... done                           Creating spring-cloud-docker_preloaded-data-service_1  ... done                           Creating spring-cloud-docker_spring-calculate-fee-service_1 ... done                     Attaching to spring-cloud-docker_eureka-registry-server_1, spring-cloud-docker_zuul-api-gateway-server_1, spring-cloud-docker_preloaded-data-service_1, spring-cloud-docker_spring-calculate-fee-service_1
+Creating spring-cloud-docker_eureka-registry-server_1 ... done
+Creating spring-cloud-docker_zuul-api-gateway-server_1 ... done
+Creating spring-cloud-docker_preloaded-data-service_1  ... done
+Creating spring-cloud-docker_spring-calculate-fee-service_1 ... done
+Attaching to spring-cloud-docker_eureka-registry-server_1, spring-cloud-docker_zuul-api-gateway-server_1, spring-cloud-docker_preloaded-data-service_1, spring-cloud-docker_spring-calculate-fee-service_1
 ...
 ...
 ...
