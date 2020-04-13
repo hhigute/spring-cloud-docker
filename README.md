@@ -12,7 +12,7 @@ The main project use the spring cloud "features" described bellow:
   * Zipkin
 * Feign (Autoconfigure and bind spring environment)
 
-![image-20200413172928680](C:\workspaces\eclipse-workspace\spring-cloud-docker\docs\Overview.png)
+![Overview](./docs/Overview.png)
 
 Some endpoints to test the solution
 
