@@ -2,7 +2,7 @@
 
 
 
-The main project we use the spring cloud "features" bellow:
+The main project use the spring cloud "features" described bellow:
 
 
 
@@ -12,7 +12,9 @@ The main project we use the spring cloud "features" bellow:
   * Zipkin
 * Feign (Autoconfigure and bind spring environment)
 
-Bellow some endpoints to test the solution
+
+
+Some endpoints to test the solution
 
 | URL                                                          | PORT                             | DESCRIPTION                                      | PROJECT                             |
 | ------------------------------------------------------------ | -------------------------------- | ------------------------------------------------ | ----------------------------------- |
