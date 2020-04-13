@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-spring-preloaded-data-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8000
+  selector:
+    app: app-spring-preloaded-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-spring-preloaded-data-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-spring-preloaded-data
+  template:
+    metadata:
+      labels:
+        app: app-spring-preloaded-data
+    spec:
+      containers:
+      - name: spring-preloaded-data-service
+        image: spring-preloaded-data-service:v1
+        ports:
+        - containerPort: 8000

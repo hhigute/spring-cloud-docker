@@ -1,0 +1,86 @@
+version: "3.5"
+services:
+
+    sqlserverdb:
+        image: microsoft/mssql-server-linux:latest
+        expose:
+            - 1433
+        ports:
+          - '1433:1433'
+        volumes:
+          - sqldata:/var/opt/mssql
+          # we copy our scripts onto the container
+          - ./sql:/usr/src/app 
+        # bash will be executed from that path, our scripts folder
+        working_dir: /usr/src/app 
+        # run the entrypoint.sh that will import the data AND sqlserver
+        command: sh -c 'chmod +x entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
+        environment:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password@123
+        networks:
+            - nt_backend  
+
+    rabbitmq:
+        # There is a prebuilt RabbitMQ image; see
+        # https://hub.docker.com/_/rabbitmq/ for details.
+        # This variant is built on Alpine Linux (it's smaller) and includes
+        # the management UI.
+        image: 'rabbitmq:3.6-management-alpine'
+        expose:
+            - 5672
+        # These ports are exposed on the host; 'hostport:containerport'.
+        # You could connect to this server from outside with the *host's*
+        # DNS name or IP address and port 5672 (the left-hand side of the
+        # colon).
+        ports:
+          # The standard AMQP protocol port
+          - '5672:5672'
+          # HTTP management UI
+          - '15672:15672'
+        networks:
+            - nt_backend 
+        depends_on:
+            - sqlserverdb
+
+    # zipkin ui
+    zipkin-server:
+        image: openzipkin/zipkin
+        expose:
+            - 9411
+        ports:
+            - '9411:9411'
+        environment:
+        # Point the zipkin at the storage backend
+        #- MYSQL_HOST=mysql
+            - RABBIT_HOST=rabbitmq
+        #- SPRING_PROFILES_ACTIVE=mysql
+        networks:
+            nt_backend:
+                aliases:
+                    - zipkin-server
+        depends_on:
+            - rabbitmq
+            - sqlserverdb
+        links:
+            - rabbitmq
+#    eureka-registry-server: 
+#        image: spring-cloud-registry-eureka-server:beta
+#        expose:
+#            - 8761
+#        ports:
+#            - '8761:8761'
+#        networks:
+#            nt_backend:
+#                aliases:
+#                    - eureka-server
+#        depends_on:
+#            - rabbitmq
+#            - zipkin-server
+volumes: 
+    sqldata:
+    
+networks:
+    nt_backend:  
+        name: nt_backend
+

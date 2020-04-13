@@ -1,0 +1,59 @@
+version: '3.5'
+services:
+    eureka-registry-server: 
+        image: spring-cloud-registry-eureka-server:beta
+        expose:
+            - 8761
+        ports:
+            - '8761:8761'
+        networks:
+            nt_backend:
+                aliases:
+                    - eureka-server
+    zuul-api-gateway-server:
+        image: spring-zuul-api-gateway-server:beta
+        ports:
+            - '8765:8765'
+        environment:
+          EUREKA_SERVER: 'eureka-server'
+          ZIPKIN_SERVER: 'zipkin-server'
+          SPRING_RABBITMQ_HOST: rabbitmq
+        networks:
+            - nt_backend     
+        depends_on:
+            - eureka-registry-server
+    preloaded-data-service:
+        image: spring-preloaded-data-service:beta
+        ports:
+            - 8000-8005:8000
+        networks:
+            - nt_backend 
+        environment:
+           SPRING_DATASOURCE_URL: 'jdbc:sqlserver://sqlserverdb:1433;databaseName=Investment'
+           SPRING_DATASOURCE_USERNAME: 'sa'
+           SPRING_DATASOURCE_PASSWORD: 'Password@123'
+           EUREKA_SERVER: 'eureka-server'
+           ZIPKIN_SERVER: 'zipkin-server'
+           SPRING_RABBITMQ_HOST: rabbitmq
+        depends_on:
+            - eureka-registry-server
+            - zuul-api-gateway-server  
+    spring-calculate-fee-service:
+        image: spring-calculate-fee-service:beta
+        ports:
+          - '8100:8100'
+        networks:
+            - nt_backend   
+        environment:
+           EUREKA_SERVER: 'eureka-server'
+           ZIPKIN_SERVER: 'zipkin-server'
+           SPRING_RABBITMQ_HOST: rabbitmq    
+        depends_on:
+            - eureka-registry-server
+            - zuul-api-gateway-server     
+            - preloaded-data-service
+
+networks:
+    nt_backend:
+        external:
+            name: nt_backend
